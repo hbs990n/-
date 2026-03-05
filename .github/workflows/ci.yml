@@ -151,9 +151,13 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: weasel-artifact-${{ env.git_ref_name }}
-          if-no-files-found: error
+          if-no-files-found: warn
           path: |
-            .\output\archives\weasel*.exe
+            .\output\WeaselServer.exe
+            .\output\WeaselDeployer.exe
+            .\output\WeaselSetup.exe
+            .\output\weasel.dll
+            .\output\WinSparkle.dll
             .\output\archives\debug_symbols.7z
 
       # Release-only steps (run on tags or master)
