@@ -32,8 +32,7 @@ jobs:
         shell: bash
         run: |
           chmod +x ./clang-format.sh
-          ./clang-format.sh -i
-          git diff --exit-code || (echo "Code formatted by clang-format" && exit 0)
+          ./clang-format.sh -n
 
   build:
     needs: lint
