@@ -153,12 +153,10 @@ jobs:
           name: weasel-artifact-${{ env.git_ref_name }}
           if-no-files-found: warn
           path: |
-            .\output\WeaselServer.exe
-            .\output\WeaselDeployer.exe
-            .\output\WeaselSetup.exe
-            .\output\weasel.dll
-            .\output\WinSparkle.dll
-            .\output\archives\debug_symbols.7z
+            output/*.exe
+            output/*.dll
+            output/*.ime
+            output/archives/*.7z
 
       # Release-only steps (run on tags or master)
       - name: Extract changelog
