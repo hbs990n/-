@@ -137,7 +137,7 @@ jobs:
           RELEASE_BUILD: ${{ (github.repository == 'rime/weasel' && startsWith(github.ref, 'refs/tags/')) && '1' || '' }}
         run: |
           $ErrorActionPreference = 'Stop'
-          .\build.bat arm64 installer
+          .\build.bat arm64
 
       - name: Compress Debug Symbols
         if: matrix.variant == 'msbuild'
