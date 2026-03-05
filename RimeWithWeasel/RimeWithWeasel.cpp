@@ -314,26 +314,26 @@ void RimeWithWeaselHandler::CommitText(const std::wstring& text,
   DLOG(INFO) << "Commit text: ipc_id = " << ipc_id << ", text = " << text;
   if (m_disabled)
     return;
-  
+
   // 获取会话状态
   SessionStatus& session_status = get_session_status(ipc_id);
-  
+
   // 构建响应数据，包含要提交的文本
   std::wstring body;
   body.reserve(4096);
-  
+
   // 添加 commit 动作和文本
   body.append(L"action=commit\n");
   body.append(L"commit=").append(text).append(L"\n");
   body.append(L".\n");
-  
+
   // 通过 channel 发送响应
   // 这里我们需要一种方式将数据发送回客户端
   // 实际上，我们需要通过 TSF 层来真正上屏
-  
+
   // 设置当前活动会话
   m_active_session = ipc_id;
-  
+
   // 调用 _Respond 来发送响应数据
   auto eat = [&body](std::wstring& msg) -> bool {
     msg = body;
