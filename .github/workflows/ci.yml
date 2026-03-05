@@ -43,7 +43,7 @@ jobs:
       SDKVER: 10.0.19041.0
     strategy:
       matrix:
-        variant: [msbuild, xmake]
+        variant: [msbuild]
     steps:
       - name: Checkout last commit
         uses: actions/checkout@v4
@@ -130,37 +130,14 @@ jobs:
           $ErrorActionPreference = 'Stop'
           .\build.bat data
 
-      - name: Setup xmake
-        if: matrix.variant == 'xmake'
-        uses: xmake-io/github-action-setup-xmake@v1
-
       - name: Build Weasel
         shell: pwsh
         id: build_weasel
         env:
           RELEASE_BUILD: ${{ (github.repository == 'rime/weasel' && startsWith(github.ref, 'refs/tags/')) && '1' || '' }}
         run: |
-          $ErrorActionPreference = 'Continue'
-          $buildLog = "${{ github.workspace }}\build.log"
-          if ('${{ matrix.variant }}' -eq 'msbuild') {
-            .\build.bat arm64 installer 2>&1 | Tee-Object -FilePath $buildLog
-          } else {
-            .\xbuild.bat arm64 installer 2>&1 | Tee-Object -FilePath $buildLog
-          }
-          $exitCode = $LASTEXITCODE
-          if ($exitCode -ne 0) {
-            Write-Output "::error::Build failed with exit code $exitCode"
-            # Output last 100 lines of build log to annotations
-            $errorLines = Get-Content $buildLog -Tail 100
-            foreach ($line in $errorLines) {
-              if ($line -match "error [A-Z]*\d*:") {
-                Write-Output "::error::$line"
-              } elseif ($line -match "warning [A-Z]*\d*:") {
-                Write-Output "::warning::$line"
-              }
-            }
-            exit $exitCode
-          }
+          $ErrorActionPreference = 'Stop'
+          .\build.bat arm64 installer
 
       - name: Compress Debug Symbols
         if: matrix.variant == 'msbuild'
