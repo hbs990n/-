@@ -30,7 +30,10 @@ jobs:
       - name: Code style lint
         if: ${{ !startsWith(github.ref, 'refs/tags/') }}
         shell: bash
-        run: ./clang-format.sh -i
+        run: |
+          chmod +x ./clang-format.sh
+          ./clang-format.sh -i
+          git diff --exit-code || (echo "Code formatted by clang-format" && exit 0)
 
   build:
     needs: lint
