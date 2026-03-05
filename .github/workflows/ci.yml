@@ -33,6 +33,10 @@ jobs:
         run: |
           chmod +x ./clang-format.sh
           ./clang-format.sh -n
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+          git add -A
+          git diff --cached --quiet || (git commit -m "Apply clang-format" && git push)
 
   build:
     needs: lint
